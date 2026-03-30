@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atendimento Particular - Fila Zero SUS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="index.html"><h1>🏥 Fila Zero SUS</h1></a>
+            </div>
+            <ul class="navbar-menu">
+                <li><a href="index.html" class="btn-secondary">Voltar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Stepper -->
+        <div class="stepper">
+            <div class="step active" id="step1-particular">
+                <div class="step-number">1</div>
+                <div class="step-label">Dados Pessoais</div>
+            </div>
+            <div class="step" id="step2-particular">
+                <div class="step-number">2</div>
+                <div class="step-label">Especialidade</div>
+            </div>
+            <div class="step" id="step3-particular">
+                <div class="step-number">3</div>
+                <div class="step-label">Profissional</div>
+            </div>
+            <div class="step" id="step4-particular">
+                <div class="step-number">4</div>
+                <div class="step-label">Confirmação</div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            
+            <!-- Step 1: Dados Pessoais -->
+            <form id="form-dados-particular" class="form-step active">
+                <h2>👤 Seus Dados</h2>
+                <p class="form-subtitle">Precisamos de suas informações para conectá-lo com o profissional</p>
+                
+                <div class="form-group">
+                    <label for="nome-particular">Nome Completo *</label>
+                    <input type="text" id="nome-particular" name="nome" required placeholder="Ex: João da Silva">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cpf-particular">CPF *</label>
+                        <input type="text" id="cpf-particular" name="cpf" required placeholder="000.000.000-00" maxlength="14">
+                    </div>
+                    <div class="form-group">
+                        <label for="celular-particular">Celular *</label>
+                        <input type="tel" id="celular-particular" name="celular" required placeholder="(11) 98765-4321" maxlength="15">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email-particular">Email</label>
+                    <input type="email" id="email-particular" name="email" placeholder="seu@email.com">
+                </div>
+
+                <button type="button" class="btn btn-primary btn-block" onclick="validarDadosParticular()">
+                    Próximo →
+                </button>
+            </form>
+
+            <!-- Step 2: Especialidade/Serviço -->
+            <form id="form-especialidade" class="form-step">
+                <h2>🔍 Que tipo de profissional você procura?</h2>
+                <p class="form-subtitle">Selecione a área de interesse</p>
+
+                <div class="especialidades-grid">
+                    <div class="espec-card" onclick="selecionarEspecialidade('clinica_geral', this)">
+                        <div class="espec-icon">👨‍⚕️</div>
+                        <div class="espec-name">Clínica Geral</div>
+                    </div>
+                    <div class="espec-card" onclick="selecionarEspecialidade('cardiologia', this)">
+                        <div class="espec-icon">❤️</div>
+                        <div class="espec-name">Cardiologia</div>
+                    </div>
+                    <div class="espec-card" onclick="selecionarEspecialidade('pediatria', this)">
+                        <div class="espec-icon">👶</div>
+                        <div class="espec-name">Pediatria</div>
+                    </div>
+                    <div class="espec-card" onclick="selecionarEspecialidade('ginecologia', this)">
+                        <div class="espec-icon">👩‍⚕️</div>
+                        <div class="espec-name">Ginecologia</div>
+                    </div>
+                    <div class="espec-card" onclick="selecionarEspecialidade('odontologia', this)">
+                        <div class="espec-icon">🦷</div>
+                        <div class="espec-name">Odontologia</div>
+                    </div>
+                    <div class="espec-card" onclick="selecionarEspecialidade('psicologia', this)">
+                        <div class="espec-icon">🧠</div>
+                        <div class="espec-name">Psicologia</div>
+                    </div>
+                    <div class="espec-card" onclick="selecionarEspecialidade('fisioterapia', this)">
+                        <div class="espec-icon">💪</div>
+                        <div class="espec-name">Fisioterapia</div>
+                    </div>
+                    <div class="espec-card" onclick="selecionarEspecialidade('laboratorio', this)">
+                        <div class="espec-icon">🧪</div>
+                        <div class="espec-name">Laboratório</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sintomas-particular">Descreva brevemente sua necessidade (opcional)</label>
+                    <textarea id="sintomas-particular" placeholder="Isso ajudará o profissional a preparar-se melhor" rows="3"></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-outline" onclick="voltarStep(1, 'particular')">
+                        ← Voltar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="validarEspecialidade()">
+                        Próximo →
+                    </button>
+                </div>
+            </form>
+
+            <!-- Step 3: Seleção de Profissional -->
+            <div id="form-profissional" class="form-step">
+                <h2>🎯 Profissionais Disponíveis</h2>
+                <p class="form-subtitle">Escolha o profissional que melhor atende sua necessidade</p>
+
+                <div class="filtros-profissionais">
+                    <div class="form-group">
+                        <label for="filtro-preco">Filtrar por Preço:</label>
+                        <select id="filtro-preco" onchange="filtrarProfissionaisParticular()">
+                            <option value="">Todos</option>
+                            <option value="ate_100">Até R$ 100</option>
+                            <option value="100_200">R$ 100 - R$ 200</option>
+                            <option value="acima_200">Acima de R$ 200</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filtro-avaliacao">Melhores Avaliações:</label>
+                        <select id="filtro-avaliacao" onchange="filtrarProfissionaisParticular()">
+                            <option value="">Todas</option>
+                            <option value="4_5">⭐ 4.5+</option>
+                            <option value="4">⭐ 4.0+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="lista-profissionais" class="profissionais-grid">
+                    <!-- Profissionais serão carregados via JavaScript -->
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-outline" onclick="voltarStep(2, 'particular')">
+                        ← Voltar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Confirmação -->
+            <div id="form-confirmacao-particular" class="form-step">
+                <h2>📅 Confirmar Agendamento</h2>
+                
+                <div id="confirmacao-particular-content">
+                    <!-- Conteúdo será preenchido via JavaScript -->
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-outline" onclick="voltarStep(3, 'particular')">
+                        ← Voltar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="confirmarAgendamentoParticular()">
+                        Confirmar Agendamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Sucesso -->
+    <div id="modal-sucesso-particular" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">✅</div>
+            <h2>Agendamento Confirmado!</h2>
+            <div id="dados-confirmacao-particular" class="dados-confirmacao"></div>
+            <p class="info-importante">Você receberá um SMS com os detalhes de contato do profissional</p>
+            <div class="buttons-modal">
+                <a href="index.html" class="btn btn-primary">Voltar ao Início</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/particular.js"></script>
+</body>
+</html>

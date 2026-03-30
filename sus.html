@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atendimento SUS - Fila Zero SUS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="index.html"><h1>🏥 Fila Zero SUS</h1></a>
+            </div>
+            <ul class="navbar-menu">
+                <li><a href="index.html" class="btn-secondary">Voltar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Stepper -->
+        <div class="stepper">
+            <div class="step active" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-label">Dados Pessoais</div>
+            </div>
+            <div class="step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-label">Sintomas</div>
+            </div>
+            <div class="step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-label">Unidades</div>
+            </div>
+            <div class="step" id="step4">
+                <div class="step-number">4</div>
+                <div class="step-label">Confirmação</div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            
+            <!-- Step 1: Dados Pessoais -->
+            <form id="form-dados" class="form-step active">
+                <h2>📋 Seus Dados Pessoais</h2>
+                <p class="form-subtitle">Precisamos de suas informações para melhor atendê-lo</p>
+                
+                <div class="form-group">
+                    <label for="nome">Nome Completo *</label>
+                    <input type="text" id="nome" name="nome" required placeholder="Ex: João da Silva">
+                    <span class="error" id="erro-nome"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cpf">CPF *</label>
+                        <input type="text" id="cpf" name="cpf" required placeholder="000.000.000-00" maxlength="14">
+                        <span class="error" id="erro-cpf"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="celular">Celular *</label>
+                        <input type="tel" id="celular" name="celular" required placeholder="(11) 98765-4321" maxlength="15">
+                        <span class="error" id="erro-celular"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cep">CEP *</label>
+                    <input type="text" id="cep" name="cep" required placeholder="01310-100" maxlength="9">
+                    <span class="error" id="erro-cep"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="endereco">Endereço (Preenchido Automaticamente)</label>
+                    <input type="text" id="endereco" name="endereco" readonly placeholder="Endereço será preenchido automaticamente">
+                </div>
+
+                <button type="button" class="btn btn-primary btn-block" onclick="validarDados()">
+                    Próximo →
+                </button>
+            </form>
+
+            <!-- Step 2: Sintomas -->
+            <form id="form-sintomas" class="form-step">
+                <h2>🩺 Qual é sua Demanda?</h2>
+                <p class="form-subtitle">Descreva seus sintomas ou necessidade de atendimento</p>
+
+                <div class="form-group">
+                    <label for="tipo_demanda">Tipo de Demanda *</label>
+                    <select id="tipo_demanda" name="tipo_demanda" required onchange="atualizarEspecialidades()">
+                        <option value="">Selecione...</option>
+                        <option value="consulta_geral">Consulta Geral</option>
+                        <option value="urgencia">Urgência/Emergência</option>
+                        <option value="odontologia">Odontologia</option>
+                        <option value="pediatria">Pediatria</option>
+                        <option value="ginecologia">Ginecologia</option>
+                        <option value="cardiologia">Cardiologia</option>
+                        <option value="retorno">Retorno de Consulta</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sintomas">Descreva seus Sintomas ou Situação *</label>
+                    <textarea id="sintomas" name="sintomas" required placeholder="Ex: Febre, dor de cabeça, etc." rows="4"></textarea>
+                    <small>Mínimo 10 caracteres</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="urgencia">Qual é o nível de urgência?</label>
+                    <div class="urgencia-options">
+                        <label class="radio-option">
+                            <input type="radio" name="urgencia" value="baixa" checked>
+                            <span>Baixa - Posso esperar dias</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="urgencia" value="media">
+                            <span>Média - Gostaria de ir hoje</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="urgencia" value="alta">
+                            <span>Alta - Preciso urgente</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-outline" onclick="voltarStep(1)">
+                        ← Voltar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="validarSintomas()">
+                        Próximo →
+                    </button>
+                </div>
+            </form>
+
+            <!-- Step 3: Seleção de Unidades -->
+            <div id="form-unidades" class="form-step">
+                <h2>🏢 Unidades Disponíveis Próximas</h2>
+                <p class="form-subtitle">Encontramos unidades no raio de 20km. Escolha a mais adequada:</p>
+
+                <div id="filtros-unidades" class="filtros">
+                    <button type="button" class="filter-btn active" onclick="filtrarUnidades('todas')">Todas</button>
+                    <button type="button" class="filter-btn" onclick="filtrarUnidades('proxima')">Mais Próxima</button>
+                    <button type="button" class="filter-btn" onclick="filtrarUnidades('menor_fila')">Menor Fila</button>
+                </div>
+
+                <div id="lista-unidades" class="unidades-grid">
+                    <!-- Unidades serão carregadas via JavaScript -->
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-outline" onclick="voltarStep(2)">
+                        ← Voltar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Confirmação e Fila Virtual -->
+            <div id="form-confirmacao" class="form-step">
+                <h2>✅ Sua Posição na Fila Virtual</h2>
+                
+                <div id="confirmacao-content">
+                    <!-- Conteúdo será preenchido via JavaScript -->
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-outline" onclick="voltarStep(3)">
+                        ← Voltar
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="finalizarAgendamento()">
+                        Confirmar Agendamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Sucesso -->
+    <div id="modal-sucesso" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">✅</div>
+            <h2>Agendamento Confirmado!</h2>
+            <div id="dados-confirmacao" class="dados-confirmacao"></div>
+            <p class="info-importante">Um QR Code foi enviado para seu celular. Apresente-o na unidade de saúde.</p>
+            <div class="buttons-modal">
+                <a href="index.html" class="btn btn-primary">Voltar ao Início</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Erro -->
+    <div id="modal-erro" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon erro">❌</div>
+            <h2 id="titulo-erro">Erro ao Processar</h2>
+            <p id="msg-erro"></p>
+            <button class="btn btn-primary" onclick="fecharModal('modal-erro')">Tentar Novamente</button>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/sus.js"></script>
+</body>
+</html>

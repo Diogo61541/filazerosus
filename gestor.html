@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Gestores - Fila Zero SUS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="index.html"><h1>🏥 Fila Zero SUS</h1></a>
+            </div>
+            <ul class="navbar-menu">
+                <li><span class="user-info">👤 Gestor</span></li>
+                <li><a href="boss-fila.html" class="btn-secondary">Fila de atendimento UPA</a></li>
+                <li><a href="index.html" class="btn-secondary">Sair</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container gestor-container">
+        <div class="gestor-header">
+            <h2>📊 Painel de Controle - Gestor SUS</h2>
+            <p>Monitore filas, carga de unidades e otimize atendimentos em tempo real</p>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpis-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon">👥</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="total-pacientes">0</div>
+                    <div class="kpi-label">Pacientes Hoje</div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon">⏱️</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="tempo-medio">--</div>
+                    <div class="kpi-label">Tempo Médio Espera</div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon">🏢</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="unidades-online">0</div>
+                    <div class="kpi-label">Unidades Online</div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon">📈</div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="taxa-ocupacao">0%</div>
+                    <div class="kpi-label">Taxa Ocupação Média</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="gestor-filtros">
+            <div class="form-group">
+                <label for="filtro-unidade">Filtrar por Unidade:</label>
+                <select id="filtro-unidade" onchange="atualizarDashboard()">
+                    <option value="">Todas as Unidades</option>
+                    <option value="ubs_centro">UBS Centro</option>
+                    <option value="ubs_norte">UBS Norte</option>
+                    <option value="ubs_sul">UBS Sul</option>
+                    <option value="pa_emergencia">PA Emergência</option>
+                    <option value="hospital_geral">Hospital Geral</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="filtro-periodo">Período:</label>
+                <select id="filtro-periodo" onchange="atualizarDashboard()">
+                    <option value="hoje">Hoje</option>
+                    <option value="semana">Esta Semana</option>
+                    <option value="mes">Este Mês</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="exportarRelatorio()">
+                📥 Exportar Relatório
+            </button>
+        </div>
+
+        <!-- Seção de Monitoramento de Unidades -->
+        <section class="gestor-section">
+            <h3>🏥 Status das Unidades em Tempo Real</h3>
+            <div id="unidades-status" class="unidades-status-grid">
+                <!-- Status das unidades será carregado via JavaScript -->
+            </div>
+        </section>
+
+        <!-- Seção de Filas -->
+        <section class="gestor-section">
+            <h3>📋 Filas Hoje</h3>
+            <div class="filas-table-container">
+                <table class="filas-table">
+                    <thead>
+                        <tr>
+                            <th>Unidade</th>
+                            <th>Especialidade</th>
+                            <th>Pacientes na Fila</th>
+                            <th>Tempo Médio</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="filas-tbody">
+                        <!-- Dados das filas serão carregados via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Seção de Alertas -->
+        <section class="gestor-section">
+            <h3>⚠️ Alertas e Recomendações</h3>
+            <div id="alertas-container">
+                <!-- Alertas serão carregados via JavaScript -->
+            </div>
+        </section>
+
+        <!-- Seção de Gráficos -->
+        <section class="gestor-section">
+            <h3>📊 Estatísticas</h3>
+            <div class="graficos-container">
+                <div class="grafico-card">
+                    <h4>Distribuição de Pacientes por Hora</h4>
+                    <div id="grafico-horario" class="grafico-placeholder">
+                        [Gráfico: Horário Peak vs Horário Vazio]
+                    </div>
+                </div>
+                <div class="grafico-card">
+                    <h4>Ocupação por Unidade</h4>
+                    <div id="grafico-ocupacao" class="grafico-placeholder">
+                        [Gráfico: Comparativo de Ocupação]
+                    </div>
+                </div>
+                <div class="grafico-card">
+                    <h4>Tempo de Espera vs Tempo de Atendimento</h4>
+                    <div id="grafico-tempo" class="grafico-placeholder">
+                        [Gráfico: Comparativo de Tempos]
+                    </div>
+                </div>
+                <div class="grafico-card">
+                    <h4>Tipos de Demanda</h4>
+                    <div id="grafico-demanda" class="grafico-placeholder">
+                        [Gráfico: Demandas por Tipo]
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Controle de Carga -->
+        <section class="gestor-section">
+            <h3>🎮 Controle de Carga entre Unidades</h3>
+            <div class="controle-carga">
+                <p class="info-box">Use a ferramenta abaixo para redistribuir pacientes entre unidades e otimizar as filas:</p>
+                
+                <div class="form-group">
+                    <label for="unidade-origem">De qual unidade deseja redirecionar?</label>
+                    <select id="unidade-origem">
+                        <option value="">Selecione...</option>
+                        <option value="ubs_centro">UBS Centro (50 pacientes aguardando)</option>
+                        <option value="ubs_norte">UBS Norte (35 pacientes aguardando)</option>
+                        <option value="ubs_sul">UBS Sul (22 pacientes aguardando)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantidade-redirecionar">Quantos pacientes redirecionar?</label>
+                    <input type="number" id="quantidade-redirecionar" min="1" max="50" placeholder="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="unidade-destino">Para qual unidade?</label>
+                    <select id="unidade-destino">
+                        <option value="">Selecione...</option>
+                        <option value="ubs_norte">UBS Norte (10 pacientes aguardando)</option>
+                        <option value="ubs_sul">UBS Sul (8 pacientes aguardando)</option>
+                        <option value="pa_emergencia">PA Emergência (5 pacientes aguardando)</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn btn-secondary" onclick="processarRedireccionamento()">
+                    🔄 Redirecionar Pacientes
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal de Confirmação -->
+    <div id="modal-confirmacao" class="modal">
+        <div class="modal-content">
+            <h2>Confirmar Ação</h2>
+            <p id="msg-confirmacao"></p>
+            <div class="buttons-modal">
+                <button type="button" class="btn btn-outline" onclick="fecharModal('modal-confirmacao')">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="confirmarAcao()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/gestor.js"></script>
+</body>
+</html>
